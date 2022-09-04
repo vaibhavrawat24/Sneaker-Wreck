@@ -1,21 +1,22 @@
 {% extends "auctions/layout.html" %}
 
+
 {% block body %}
-    <h2>Available Sneakers</h2>
+    <h2 id="available">Available Sneakers</h2>
     <form action="{% url 'displayCategory' %}" method="POST" class="my-3">
         {% csrf_token %}
-        <label for="category">Choose a category:</label>
+        <label for="category" id="cat">Choose a category:</label>
 
             <select name="category" id="category">
                 {% for cat in categories %}
                     <option value="cat">{{ cat }}</option>
                 {% endfor %}
             </select>
-        <button type="submit" class="btn btn-info">Select</button>
+        <button id="sub" type="submit" class="btn btn-info">Select</button>
     </form>
     <div class="row">
         {% for listing in listings %}    
-            <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 20rem;">
                 <img class="card-img-top" src="{{ listing.imageUrl }}" alt="{{ listing.title }}">
                 <div class="card-body">
                 <h5 class="card-title">{{ listing.title }}</h5>

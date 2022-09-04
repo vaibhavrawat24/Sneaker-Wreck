@@ -20,41 +20,45 @@
             Congratulations! You won the Auction.
         </div>
     {% endif %}
-
-    <div class="row mx-3">
+    
+    <h2 id="listhead">{{ listing.title }}</h2>
+      
+    <div class="row mx-3" id="bidding">
         {% if user.is_authenticated and listing.isActive %}
             {% if isOwner %}
                 <form action="{% url 'closeAuction' id=listing.id %}" method="POST" class="mx-3">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Close Bidding</button>
+                    <button  style="height:30px; padding-top:1px;" type="submit" class="btn btn-danger">Close Bidding</button>
                 </form>
             {% endif %}
             {% if isListingInWatchList %}
                 <form action="{% url 'removeWatchList' id=listing.id %}" method="POST">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Remove from Watch List</button>
+                    <button style="height:30px; padding-top:1px;" type="submit" class="btn btn-danger">Remove from Watch List</button>
                 </form>
             {% else %}
                 <form action="{% url 'addWatchList' id=listing.id %}" method="POST">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Add to Watch List</button>
+                    <button style="height:30px; padding-top:1px;" type="submit" class="btn btn-success">Add to Watch List</button>
                 </form>
             {% endif %}
 
         {% endif%}
     </div>
-     <h2>Sneaker: {{ listing.title }}</h2>
-     <img src="{{ listing.imageUrl }}" alt="{{ listing.title }}" height="300px">
-     <p>{{ listing.description }}</p>
-     <p>Owner: {{listing.owner }}</p>
-     <h6>Initial Bid: ${{ listing.price.bid }}</h6>
+     
+     <img  style="padding-left:10px;" src="{{ listing.imageUrl }}" alt="{{ listing.title }}" height="400px" width="350px">
+     {% comment %} <h7 id="des">Description:</h1> {% endcomment %}
+     <h3>Description:</h3>
+     <p id="desc">{{ listing.description }}</p>
+     <p style="font-weight:bold; position:relative; bottom:80px; left:5px;">Owner: {{listing.owner }}</p>
+     <h6 style="padding-left:10px;position:relative;bottom:80px;">Initial Bid: ${{ listing.price.bid }}</h6>
      {% if user.is_authenticated %}
         <form action="{% url 'addBid' id=listing.id %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
-                <label for="Bid">Add Bid</label>
-                <input type="number" min="0" name="newBid" placeholder="Add New Bid">
-                <button type="submit" class="btn btn-info">Add</button>
+                <label style="padding-left:10px;position:relative;bottom:80px;" for="Bid">Add Bid</label>
+                <input style="position:relative;bottom:80px;"type="number" min="0" name="newBid" placeholder="Add New Bid">
+                <button style="position:relative;bottom:83px;height: 30px;padding-top: 1px;" type="submit" class="btn btn-info">Add</button>
             </div>
         
         </form>
@@ -62,20 +66,20 @@
      <p>{{ message }}</p>
 
      
-        <h2>Comments</h2>
+        <h2 style="padding-left:10px;position:relative; bottom:80px;">Comments</h2>
         {% if user.is_authenticated %}
             <form action="{% url 'addComment' id=listing.id %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="comment">Add Comment</label>
-                    <input type="text" name="newComment" placeholder="Add New Comment">
-                    <button type="submit" class="btn btn-info">Add</button>
+                    <label style="padding-left:10px;position:relative; bottom:80px;" for="comment">Add Comment</label>
+                    <input style="position:relative; bottom:80px;"type="text" name="newComment" placeholder="Add New Comment">
+                    <button style="position:relative;bottom:83px;height: 30px;padding-top: 1px;" type="submit" class="btn btn-info">Add</button>
                 </div>
                
             </form>
         {% endif %}
         <br/>
-        <ul class="list-group">
+        <ul class="list-group" style="position:relative;bottom:83px;">
             {% for comment in allComments %}            
                 <li class="list-group-item">
                     {{ comment.message }}
@@ -84,5 +88,10 @@
                 </li>           
             {% endfor %}
         </ul>
+
+        
+
+        
+        
      
 {% endblock %}

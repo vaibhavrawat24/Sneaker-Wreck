@@ -5,11 +5,11 @@
     <head>
         <title>{% block title %}Sneaker Wreck{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+        <link rel="stylesheet" type"text/css" href="{% static 'styles.css' %}" >
     </head>
     <body>
-        <h1>Sneaker Wreck</h1>
-        <div>
+        <h1 id="sneaker" >Sneaker Wreck</h1>
+        <div id="sign">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
             {% else %}
