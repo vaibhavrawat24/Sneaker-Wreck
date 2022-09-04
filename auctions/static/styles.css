@@ -1,3 +1,7 @@
+body{
+    background-image: url(https://wallpapercave.com/wp/wp5527610.jpg);
+}
+
 #sneaker{
     text-align: center;
     font-family: 'Lucida Handwriting',cursive;
@@ -7,7 +11,7 @@
 #sign{
     text-align: right;
     position: relative;
-    top: -55px;
+    top: -80px;
     padding-right: 10px;
     /* font-family: 'garamond'; */
     font-weight: bold;
@@ -79,4 +83,21 @@ h3{
     bottom: 400px;
     font-size: x-large;
     font-weight: bold;
+}
+
+#kicks{
+    position: relative;
+    font-size: medium;
+    bottom: 45px;
+    left: 10px;
+    font-family: 'Lucida Handwriting';
+    font-weight: bold;
+}
+
+#kicksimg{
+    position: relative;
+    left: 805px;
+    bottom: 88px;
+    height:30px;
+    
 }
