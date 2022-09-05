@@ -2,6 +2,8 @@ from email import message
 from unicodedata import category
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import matplotlib 
+matplotlib.use('Agg') 
 
 
 class User(AbstractUser):
