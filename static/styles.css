@@ -1,0 +1,104 @@
+body{
+    background-image: url(https://wallpapercave.com/wp/wp5527610.jpg);
+}
+
+#sneaker{
+    text-align: center;
+    font-family: 'Lucida Handwriting',cursive;
+    padding-top: 10px;
+}
+
+#sign{
+    text-align: right;
+    position: relative;
+    top: -80px;
+    padding-right: 10px;
+    /* font-family: 'garamond'; */
+    font-weight: bold;
+}
+
+.nav{
+    float: right;
+    margin-top: -15px;
+}
+
+#available{
+    text-align: center;
+    font-family: 'Georgia',cursive;
+}
+
+#cat{
+    position: relative;
+    left: 495px;
+}
+
+#category{
+    position: relative;
+    left: 500px;
+    top: 1px;
+}
+
+#sub{
+    position: relative;
+    left: 500px;
+    height: 30px;
+    padding-top: 1px;
+}
+
+#bidding{
+   padding-bottom: 10px;
+   position: relative;
+   right: 20px;
+}
+
+#listhead{
+    font-family: 'Georgia'; 
+    font-weight: bold;
+    position: relative;
+    left: 10px;
+}
+
+#des{
+    font-weight: bold;
+    font-family: 'Georgia';
+    position: relative;
+    left: 400px;
+    font-size: x-large;
+    bottom: 913px;
+}
+
+#desc{
+    position: relative;
+    left: 370px;
+    bottom: 400px;
+    word-wrap: break-word;
+    width:800px;
+    min-width: auto;
+    
+} 
+
+h3{
+    position: relative;
+    left: 370px;
+    bottom: 400px;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+#kicks{
+    position: relative;
+    font-size: medium;
+    bottom: 45px;
+    left: 10px;
+    font-family: 'Lucida Handwriting';
+    font-weight: bold;
+}
+
+#kicksimg{
+    position: relative;
+    left: 805px;
+    bottom: 88px;
+    height:30px;
+    
+}
+
