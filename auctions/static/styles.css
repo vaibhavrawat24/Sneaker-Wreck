@@ -1,7 +1,10 @@
 /* body{
     background-image: url(https://wallpapercave.com/wp/wp5527610.jpg);
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
+    margin:0;
+    padding:0;
+     overflow-x:hidden;
    
 } */
 
