@@ -1,1 +1,1 @@
-web: gunicorn sneakerwreck.wsgi 
+web: gunicorn commerce.wsgi 
