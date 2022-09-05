@@ -1,1 +1,1 @@
-web: gunicorn sneakerwreck.wsgi --log-file -
+web: gunicorn sneakerwreck.wsgi 
