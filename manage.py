@@ -3,7 +3,7 @@
 import os
 import sys
 
-
+#main manage file
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'commerce.settings')
     try:
