@@ -23,7 +23,7 @@ SneakerWreck is a dynamic sneaker reselling platform developed using Python and 
 ### Prerequisites
 
 - Python and Django installed on your system.
-- SQL database (e.g., MySQL or PostgreSQL) configured.
+- SQL database (e.g., SQLite) configured.
 
 ### Setup
 
