@@ -5,14 +5,14 @@
     <h2 id="available">Available Sneakers</h2>
     <form action="{% url 'displayCategory' %}" method="POST" class="my-3">
         {% csrf_token %}
+      
         <label for="category" id="cat">Choose a category:</label>
-
-            <select name="category" id="category">
-                {% for cat in categories %}
-                    <option value="cat">{{ cat }}</option>
-                {% endfor %}
-            </select>
-        <button id="sub" type="submit" class="btn btn-info">Select</button>
+    <select name="category" id="category">
+        {% for cat in categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+    </select>
+    <button id="sub" type="submit" class="btn btn-info">Select</button>
     </form>
     <div class="row">
         {% for listing in listings %}    
