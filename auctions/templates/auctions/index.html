@@ -1,29 +1,50 @@
 {% extends "auctions/layout.html" %}
 
-
 {% block body %}
-    <h2 id="available">Available Sneakers</h2>
-    <form action="{% url 'displayCategory' %}" method="POST" class="my-3">
-        {% csrf_token %}
-      
-        <label for="category" id="cat">Choose a category:</label>
-    <select name="category" id="category">
-        {% for cat in categories %}
-            <option value="{{ cat }}">{{ cat }}</option>
-        {% endfor %}
+
+<!-- Header + Filter -->
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-10 md:mb-16 border-b border-stone-100 pb-8 md:pb-10">
+  <h1 class="font-serif font-light text-4xl md:text-5xl lg:text-6xl tracking-tight">Available Sneakers</h1>
+
+  <form action="{% url 'displayCategory' %}" method="POST" class="flex items-center gap-3 sm:gap-4">
+    {% csrf_token %}
+    <span class="font-mono text-xs tracking-widest uppercase text-stone-400">Filter</span>
+    <select name="category" style="-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23aaa' d='M6 8L1 3h10z'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 0 center;padding-right:18px;"
+           class="bg-transparent border-0 border-b border-stone-300 font-mono text-xs tracking-widest uppercase text-stone-700 px-0 py-2 focus:outline-none focus:border-stone-900 cursor-pointer">
+      {% for cat in categories %}
+        <option value="{{ cat }}">{{ cat }}</option>
+      {% endfor %}
     </select>
-    <button id="sub" type="submit" class="btn btn-info">Select</button>
-    </form>
-    <div class="row">
-        {% for listing in listings %}    
-            <div class="card" style="width: 20rem;">
-                <img class="card-img-top" src="{{ listing.imageUrl }}" alt="{{ listing.title }}">
-                <div class="card-body">
-                <h5 class="card-title">{{ listing.title }}</h5>
-                <p class="card-text">{{ listing.description }}</p>
-                <a href="{% url 'listing' id=listing.id %}" class="btn btn-primary">Details</a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+    <button type="submit" class="font-mono text-xs tracking-widest uppercase border-b border-stone-900 pb-0.5 hover:text-amber-600 hover:border-amber-600 transition-colors duration-300">Apply</button>
+  </form>
+</div>
+
+{% if listings %}
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8 mb-20 md:mb-40">
+    {% for listing in listings %}
+      <a href="{% url 'listing' id=listing.id %}" class="group cursor-pointer">
+        <div class="bg-surface-container-lowest p-3 md:p-6 mb-3 md:mb-5 transition-colors duration-500 group-hover:bg-surface-container-high aspect-[3/4] flex items-center justify-center overflow-hidden">
+          <img src="{{ listing.imageUrl }}" alt="{{ listing.title }}" loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+        </div>
+        <div class="flex justify-between items-start gap-2">
+          <div class="flex-1 min-w-0">
+            <span class="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-on-surface-variant mb-0.5 block">{{ listing.category }}</span>
+            <h4 class="font-serif text-base md:text-xl truncate">{{ listing.title }}</h4>
+            <p class="font-mono text-[10px] md:text-xs text-stone-400 mt-0.5 truncate hidden sm:block">{{ listing.description }}</p>
+          </div>
+          <span class="font-mono text-xs md:text-sm whitespace-nowrap">${{ listing.price.bid }}</span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="py-24 md:py-40 text-center">
+    <p class="font-serif italic text-2xl md:text-3xl text-stone-300 mb-8">No sneakers available right now.</p>
+    {% if user.is_authenticated %}
+      <a href="{% url 'create' %}" class="inline-block bg-stone-900 text-white font-mono text-xs tracking-widest uppercase px-10 py-4 hover:bg-stone-700 transition-colors">List a Pair</a>
+    {% endif %}
+  </div>
+{% endif %}
+
 {% endblock %}

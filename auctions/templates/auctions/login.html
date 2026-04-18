@@ -1,24 +1,43 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<div class="w-full max-w-sm mx-auto mb-20 md:mb-40 py-8 md:py-0">
+  <div class="mb-10 md:mb-16 border-b border-stone-100 pb-8">
+    <span class="font-mono text-xs tracking-widest uppercase text-secondary block mb-3">Welcome Back</span>
+    <h1 class="font-serif font-light text-4xl md:text-5xl tracking-tight">Log In</h1>
+  </div>
 
-    <h2>Login</h2>
+  {% if message %}
+    <div class="mb-6 px-4 py-3 border-l-2 border-red-500 bg-red-50 font-mono text-xs tracking-wide text-red-700">
+      {{ message }}
+    </div>
+  {% endif %}
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+  <form action="{% url 'login' %}" method="post" class="space-y-8">
+    {% csrf_token %}
 
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Username</label>
+      <input autofocus type="text" name="username" placeholder="Your username"
+             class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+    </div>
 
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Password</label>
+      <input type="password" name="password" placeholder="••••••••"
+             class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+    </div>
 
+    <div class="pt-2">
+      <button type="submit" class="w-full bg-primary text-on-primary font-mono text-xs tracking-widest uppercase py-4 md:py-5 hover:opacity-80 transition-opacity">
+        Log In
+      </button>
+    </div>
+  </form>
+
+  <p class="mt-8 font-mono text-xs tracking-widest uppercase text-stone-400">
+    No account?
+    <a href="{% url 'register' %}" class="text-stone-900 border-b border-stone-900 pb-0.5 hover:text-amber-600 hover:border-amber-600 transition-colors duration-300">Register here.</a>
+  </p>
+</div>
 {% endblock %}

@@ -1,50 +1,137 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>{% block title %}Sneaker Wreck{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" type"text/css" href="{% static 'styles.css' %}" >
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
-    </head>
-    <body style="background-image: url(https://wallpapercave.com/wp/wp5527610.jpg);;background-repeat:repeat-y;margin:0;padding:0; overflow-x:hidden;">
-        <h1 id="sneaker" >Sneaker Wreck</h1>
-        <h2 id="kicks">Get your kicks!</h2>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>{% block title %}Sneaker Wreck{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#000000", "on-primary": "#ffffff",
+            "surface": "#f9f9f9", "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f3f3", "surface-container": "#eeeeee",
+            "surface-container-high": "#e8e8e8", "surface-container-highest": "#e2e2e2",
+            "on-surface": "#1a1c1c", "on-surface-variant": "#444748",
+            "outline": "#747878", "outline-variant": "#c4c7c7",
+            "secondary": "#775a1a", "on-secondary": "#ffffff",
+            "error": "#ba1a1a", "on-error": "#ffffff",
+            "background": "#f9f9f9", "on-background": "#1a1c1c",
+          },
+          fontFamily: { headline: ["Newsreader"], body: ["Inter"], label: ["Space Grotesk"] },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+    body { font-family: 'Inter', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+    .font-serif { font-family: 'Newsreader', serif; }
+    .font-mono  { font-family: 'Space Grotesk', monospace; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: flex; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface">
 
-        <h4 style="position:relative;left:980px;bottom:100px;font-size:x-small;font-family: 'Lucida Handwriting';font-weight:bold;">Code and illustrations by <a href="https://linktr.ee/rawatvaibhav24">Vaibhav Singh Rawat</a></h4>
-        <div id="sign">
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Available Sneakers</a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create' %}">Sell your Sneakers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchList' %}">Watchlist</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-        <hr>
-        {% block body %}
-        {% endblock %}
-    </body>
+<!-- ── Nav ── -->
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl">
+  <div class="flex justify-between items-center max-w-[1920px] mx-auto px-5 sm:px-8 lg:px-12 py-5">
+
+    <!-- Logo -->
+    <a href="{% url 'index' %}" class="text-xl sm:text-2xl font-serif italic text-stone-900 hover:text-amber-600 transition-colors duration-300">Sneaker Wreck</a>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-10">
+      <a href="{% url 'shop' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Shop</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'create' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Sell</a>
+        <a href="{% url 'watchList' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Watchlist</a>
+        <a href="{% url 'logout' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Log Out</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Log In</a>
+        <a href="{% url 'register' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Register</a>
+      {% endif %}
+    </div>
+
+    <!-- Desktop right -->
+    <div class="hidden md:flex items-center gap-6">
+      {% if user.is_authenticated %}
+        <span class="font-mono text-xs tracking-widest uppercase text-stone-400">{{ user.username }}</span>
+      {% endif %}
+      <a href="{% url 'watchList' %}">
+        <span class="material-symbols-outlined text-stone-900 scale-100 active:scale-95 transition-transform">bookmark</span>
+      </a>
+    </div>
+
+    <!-- Mobile: right side icons -->
+    <div class="flex md:hidden items-center gap-4">
+      <a href="{% url 'watchList' %}">
+        <span class="material-symbols-outlined text-stone-900" style="font-size:20px;">bookmark</span>
+      </a>
+      <button id="hamburger" aria-label="Open menu" class="flex flex-col justify-center gap-1.5 p-1">
+        <span class="block w-6 h-0.5 bg-stone-900 transition-all"></span>
+        <span class="block w-6 h-0.5 bg-stone-900 transition-all"></span>
+        <span class="block w-4 h-0.5 bg-stone-900 transition-all"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-stone-100 h-[1px] opacity-30"></div>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-menu" class="flex-col bg-white border-t border-stone-100 px-5 py-6 gap-6 md:hidden">
+    <a href="{% url 'shop' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Shop</a>
+    {% if user.is_authenticated %}
+      <span class="font-mono text-xs tracking-widest uppercase text-stone-400">{{ user.username }}</span>
+      <a href="{% url 'create' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Sell</a>
+      <a href="{% url 'watchList' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Watchlist</a>
+      <a href="{% url 'logout' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Log Out</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Log In</a>
+      <a href="{% url 'register' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Register</a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- Page Content -->
+<main class="pt-24 md:pt-28 max-w-[1920px] mx-auto px-5 sm:px-8 lg:px-12">
+  {% block body %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="w-full py-14 px-5 sm:px-8 lg:px-12 mt-20 md:mt-40 bg-stone-50">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-[1920px] mx-auto gap-8 md:gap-0">
+    <div>
+      <div class="font-serif italic text-xl text-stone-900 mb-3">Sneaker Wreck</div>
+      <p class="font-mono text-xs tracking-widest uppercase text-stone-400 max-w-xs leading-loose">
+        © 2024 Sneaker Wreck. All rights reserved.<br>
+        Built by <a href="https://vaibhavdev.qzz.io" target="_blank" class="text-stone-900 border-b border-stone-400 hover:border-stone-900 transition-colors">Vaibhav</a>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-6 md:gap-8">
+      <a href="{% url 'shop' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Shop</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'create' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Sell</a>
+        <a href="{% url 'watchList' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Watchlist</a>
+      {% else %}
+        <a href="{% url 'register' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Register</a>
+        <a href="{% url 'login' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Log In</a>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  });
+</script>
+</body>
 </html>

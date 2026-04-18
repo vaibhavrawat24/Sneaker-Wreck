@@ -1,97 +1,142 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container">
-        {% if message %}
-            {% if update %}
-            <div class="alert alert-success" role="alert">
-                {{ message }}
-            </div>
-            {% else %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-            {% endif %}
-        {% endif%}
-    </div>
 
-    {% if not listing.isActive and user == listing.price.user %}
-        <div class="alert alert-success" role="alert">
-            Congratulations! You won the Auction.
-        </div>
-    {% endif %}
-    
-    <h2 id="listhead">{{ listing.title }}</h2>
-      
-    <div class="row mx-3" id="bidding">
-        {% if user.is_authenticated and listing.isActive %}
-            {% if isOwner %}
-                <form action="{% url 'closeAuction' id=listing.id %}" method="POST" class="mx-3">
-                    {% csrf_token %}
-                    <button  style="height:30px; padding-top:1px;" type="submit" class="btn btn-danger">Close Bidding</button>
-                </form>
-            {% endif %}
-            {% if isListingInWatchList %}
-                <form action="{% url 'removeWatchList' id=listing.id %}" method="POST">
-                    {% csrf_token %}
-                    <button style="height:30px; padding-top:1px;" type="submit" class="btn btn-danger">Remove from Watch List</button>
-                </form>
-            {% else %}
-                <form action="{% url 'addWatchList' id=listing.id %}" method="POST">
-                    {% csrf_token %}
-                    <button style="height:30px; padding-top:1px;" type="submit" class="btn btn-success">Add to Watch List</button>
-                </form>
-            {% endif %}
+{% if not listing.isActive and user == listing.price.user %}
+  <div class="w-full bg-stone-900 text-stone-50 text-center py-3 font-mono text-xs tracking-widest uppercase mb-6">
+    Congratulations — you won this auction.
+  </div>
+{% endif %}
 
-        {% endif%}
+{% if message %}
+  <div class="mb-6 px-4 py-3 border-l-2 font-mono text-xs tracking-wide
+    {% if update %}border-stone-900 bg-stone-50 text-stone-700{% else %}border-red-500 bg-red-50 text-red-700{% endif %}">
+    {{ message }}
+  </div>
+{% endif %}
+
+<!-- Main Product Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 lg:gap-20 mb-16 md:mb-40">
+
+  <!-- Image -->
+  <div class="lg:col-span-7 bg-surface-container-low p-6 sm:p-10 lg:p-20 rounded-lg flex items-center justify-center">
+    <img src="{{ listing.imageUrl }}" alt="{{ listing.title }}" loading="lazy"
+         class="w-full h-auto object-contain max-h-[400px] md:max-h-[600px] lg:max-h-[700px]">
+  </div>
+
+  <!-- Info -->
+  <div class="lg:col-span-5 flex flex-col justify-center">
+    <span class="font-mono text-xs tracking-widest uppercase text-secondary mb-2 block">{{ listing.category }}</span>
+    <h1 class="font-serif font-light text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-tight mb-4 tracking-tight">{{ listing.title }}</h1>
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="font-mono text-xl md:text-2xl text-on-surface">${{ listing.price.bid }}</span>
+      <span class="font-mono text-xs text-on-surface-variant uppercase tracking-widest">
+        {% if listing.isActive %}Active{% else %}Closed{% endif %}
+      </span>
     </div>
-     
-     <img  style="padding-left:10px;" src="{{ listing.imageUrl }}" alt="{{ listing.title }}" height="400px" width="350px">
-     {% comment %} <h7 id="des">Description:</h1> {% endcomment %}
-     <h3>Description:</h3>
-     <p id="desc">{{ listing.description }}</p>
-     <p style="font-weight:bold; position:relative; bottom:80px; left:5px;">Owner: {{listing.owner }}</p>
-     <h6 style="padding-left:10px;position:relative;bottom:80px;">Initial Bid: ${{ listing.price.bid }}</h6>
-     {% if user.is_authenticated %}
+    <p class="font-mono text-xs tracking-widest uppercase text-stone-400 mb-6 md:mb-10">Listed by {{ listing.owner }}</p>
+
+    <p class="font-sans text-sm md:text-base leading-relaxed text-on-surface-variant mb-8 md:mb-10 border-t border-outline-variant/20 pt-6 md:pt-8">
+      {{ listing.description }}
+    </p>
+
+    {% if user.is_authenticated and listing.isActive %}
+      <div class="space-y-3 md:space-y-4 mb-8 md:mb-10">
+
         <form action="{% url 'addBid' id=listing.id %}" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label style="padding-left:10px;position:relative;bottom:80px;" for="Bid">Add Bid</label>
-                <input style="position:relative;bottom:80px;"type="number" min="0" name="newBid" placeholder="Add New Bid">
-                <button style="position:relative;bottom:83px;height: 30px;padding-top: 1px;" type="submit" class="btn btn-info">Add</button>
-            </div>
-        
+          {% csrf_token %}
+          <div class="flex gap-2 md:gap-3">
+            <input type="number" min="0" step="0.01" name="newBid" placeholder="Your bid ($)"
+                   class="flex-1 border-0 border-b border-stone-300 bg-transparent font-mono text-sm px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300 tracking-wide">
+            <button type="submit" class="bg-primary text-on-primary font-mono text-xs tracking-widest uppercase px-6 md:px-8 py-3 hover:opacity-80 transition-opacity whitespace-nowrap">
+              Place Bid
+            </button>
+          </div>
         </form>
-     {% endif %}
-     <p>{{ message }}</p>
 
-     
-        <h2 style="padding-left:10px;position:relative; bottom:80px;">Comments</h2>
-        {% if user.is_authenticated %}
-            <form action="{% url 'addComment' id=listing.id %}" method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label style="padding-left:10px;position:relative; bottom:80px;" for="comment">Add Comment</label>
-                    <input style="position:relative; bottom:80px;"type="text" name="newComment" placeholder="Add New Comment">
-                    <button style="position:relative;bottom:83px;height: 30px;padding-top: 1px;" type="submit" class="btn btn-info">Add</button>
-                </div>
-               
-            </form>
+        {% if isListingInWatchList %}
+          <form action="{% url 'removeWatchList' id=listing.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
+              <span>Remove from Watchlist</span>
+              <span class="material-symbols-outlined text-sm">bookmark_remove</span>
+            </button>
+          </form>
+        {% else %}
+          <form action="{% url 'addWatchList' id=listing.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
+              <span>Save to Watchlist</span>
+              <span class="material-symbols-outlined text-sm">bookmark_add</span>
+            </button>
+          </form>
         {% endif %}
-        <br/>
-        <ul class="list-group" style="position:relative;bottom:83px;">
-            {% for comment in allComments %}            
-                <li class="list-group-item">
-                    {{ comment.message }}
-                    <br/>
-                    <p>Posted by <strong>{{ comment.author }}</strong></p>
-                </li>           
-            {% endfor %}
-        </ul>
 
-        
+        {% if isOwner %}
+          <form action="{% url 'closeAuction' id=listing.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="w-full border-b border-red-200 py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-red-400 text-left flex justify-between items-center hover:text-red-600 transition-colors">
+              <span>Close Auction</span>
+              <span class="material-symbols-outlined text-sm">gavel</span>
+            </button>
+          </form>
+        {% endif %}
 
-        
-        
-     
+      </div>
+    {% endif %}
+
+    <!-- Bento attributes -->
+    <div class="grid grid-cols-2 gap-px bg-outline-variant/10">
+      <div class="bg-surface py-4 pr-4">
+        <span class="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Category</span>
+        <span class="font-sans text-xs md:text-sm">{{ listing.category }}</span>
+      </div>
+      <div class="bg-surface py-4 pl-4">
+        <span class="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Owner</span>
+        <span class="font-sans text-xs md:text-sm">{{ listing.owner }}</span>
+      </div>
+      <div class="bg-surface py-4 pr-4">
+        <span class="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Starting Bid</span>
+        <span class="font-sans text-xs md:text-sm">${{ listing.price.bid }}</span>
+      </div>
+      <div class="bg-surface py-4 pl-4">
+        <span class="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Status</span>
+        <span class="font-sans text-xs md:text-sm">{% if listing.isActive %}Active{% else %}Closed{% endif %}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comments -->
+<section class="mb-16 md:mb-40 border-t border-outline-variant/20 pt-10 md:pt-16">
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 mb-8 md:mb-12">
+    <h2 class="font-serif text-2xl md:text-3xl">Comments</h2>
+    {% if user.is_authenticated %}
+      <span class="font-mono text-xs tracking-widest uppercase text-stone-400">{{ user.username }}</span>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+    <form action="{% url 'addComment' id=listing.id %}" method="POST" class="flex gap-3 mb-10 md:mb-16">
+      {% csrf_token %}
+      <input type="text" name="newComment" placeholder="Leave a comment…"
+             class="flex-1 border-0 border-b border-stone-300 bg-transparent font-sans text-sm px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+      <button type="submit" class="bg-primary text-on-primary font-mono text-xs tracking-widest uppercase px-5 md:px-8 py-3 hover:opacity-80 transition-opacity whitespace-nowrap">
+        Post
+      </button>
+    </form>
+  {% endif %}
+
+  <div class="max-w-2xl">
+    {% for comment in allComments %}
+      <div class="py-5 border-b border-stone-100">
+        <span class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-2">{{ comment.author }}</span>
+        <p class="font-sans text-sm leading-relaxed">{{ comment.message }}</p>
+      </div>
+    {% empty %}
+      <p class="font-serif italic text-stone-300 text-lg md:text-xl">No comments yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
 {% endblock %}

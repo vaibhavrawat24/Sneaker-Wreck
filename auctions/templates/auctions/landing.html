@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Sneaker Wreck — Bid. Win. Wear.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#000000", "on-primary": "#ffffff",
+            "surface": "#f9f9f9", "secondary": "#775a1a",
+          },
+          fontFamily: { headline: ["Newsreader"], body: ["Inter"], label: ["Space Grotesk"] },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+    body { font-family: 'Inter', sans-serif; }
+    .font-serif { font-family: 'Newsreader', serif; }
+    .font-mono  { font-family: 'Space Grotesk', monospace; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .ticker-track { animation: ticker 28s linear infinite; white-space: nowrap; display: inline-flex; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: flex; }
+  </style>
+</head>
+<body class="bg-[#f9f9f9] text-stone-900 overflow-x-hidden">
+
+<!-- ── Nav ── -->
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl">
+  <div class="flex justify-between items-center max-w-[1920px] mx-auto px-5 sm:px-8 lg:px-12 py-5">
+    <span class="text-xl sm:text-2xl font-serif italic text-stone-900">Sneaker Wreck</span>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="{% url 'shop' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Shop</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'create' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Sell</a>
+        <a href="{% url 'watchList' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Watchlist</a>
+        <a href="{% url 'logout' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Log Out</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Log In</a>
+        <a href="{% url 'register' %}" class="text-stone-500 font-mono tracking-widest text-xs uppercase hover:text-amber-600 transition-colors duration-300">Register</a>
+      {% endif %}
+    </div>
+
+    <div class="hidden md:flex items-center gap-4">
+      {% if user.is_authenticated %}
+        <span class="font-mono text-xs tracking-widest uppercase text-stone-400">{{ user.username }}</span>
+      {% else %}
+        <a href="{% url 'register' %}" class="font-mono text-xs tracking-widest uppercase border-b border-stone-900 pb-0.5 hover:text-amber-600 hover:border-amber-600 transition-colors duration-300">Join Free</a>
+      {% endif %}
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="hamburger" class="flex md:hidden flex-col justify-center gap-1.5 p-1">
+      <span class="block w-6 h-0.5 bg-stone-900"></span>
+      <span class="block w-6 h-0.5 bg-stone-900"></span>
+      <span class="block w-4 h-0.5 bg-stone-900"></span>
+    </button>
+  </div>
+  <div class="bg-stone-100 h-[1px] opacity-30"></div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="flex-col bg-white border-t border-stone-100 px-5 py-6 gap-6 md:hidden">
+    <a href="{% url 'shop' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Shop</a>
+    {% if user.is_authenticated %}
+      <span class="font-mono text-xs tracking-widest uppercase text-stone-400">{{ user.username }}</span>
+      <a href="{% url 'create' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Sell</a>
+      <a href="{% url 'watchList' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Watchlist</a>
+      <a href="{% url 'logout' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Log Out</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Log In</a>
+      <a href="{% url 'register' %}" class="font-mono tracking-widest text-xs uppercase text-stone-700 hover:text-amber-600 transition-colors">Register</a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="min-h-screen flex flex-col justify-center pt-28 pb-16 px-5 sm:px-8 lg:px-12 max-w-[1920px] mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+
+    <div class="lg:col-span-6">
+      <span class="font-mono text-xs tracking-widest uppercase text-amber-600 mb-5 block">Live Sneaker Auctions</span>
+      <h1 class="font-serif font-light leading-[0.95] tracking-tight mb-8" style="font-size: clamp(3rem, 10vw, 8rem);">
+        Bid.<br>Win.<br><span class="italic">Wear.</span>
+      </h1>
+      <p class="font-sans text-base md:text-lg text-stone-500 leading-relaxed max-w-md mb-10">
+        Sneaker Wreck is a peer-to-peer auction platform for sneaker enthusiasts. Place your bid — highest offer takes the pair home.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <a href="{% url 'shop' %}" class="inline-block bg-stone-900 text-white font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:bg-stone-700 transition-colors duration-300 text-center">
+          Browse Auctions
+        </a>
+        {% if not user.is_authenticated %}
+          <a href="{% url 'register' %}" class="inline-block border border-stone-300 text-stone-700 font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:border-stone-900 hover:text-stone-900 transition-colors duration-300 text-center">
+            Create Account
+          </a>
+        {% else %}
+          <a href="{% url 'create' %}" class="inline-block border border-stone-300 text-stone-700 font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:border-stone-900 hover:text-stone-900 transition-colors duration-300 text-center">
+            List a Pair
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Stacked cards — hidden on small screens -->
+    <div class="lg:col-span-6 relative h-[380px] md:h-[480px] hidden md:block">
+      <div class="absolute top-0 right-12 md:right-16 w-56 md:w-64 h-72 md:h-80 bg-stone-100 rounded-lg rotate-6 shadow-sm"></div>
+      <div class="absolute top-6 right-6 md:right-8 w-56 md:w-64 h-72 md:h-80 bg-stone-200 rounded-lg rotate-2 shadow-sm"></div>
+      <div class="absolute top-10 right-0 w-56 md:w-64 h-72 md:h-80 bg-white rounded-lg shadow-md flex flex-col items-center justify-center gap-4 p-8">
+        <span class="material-symbols-outlined text-stone-300" style="font-size:2.5rem;">gavel</span>
+        <span class="font-mono text-xs tracking-widest uppercase text-stone-400 text-center">Highest bid<br>wins the drop</span>
+        <div class="w-full border-t border-stone-100 pt-4 text-center">
+          <span class="font-serif text-2xl text-stone-900">$ ???</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Ticker ── -->
+<div class="w-full bg-stone-900 text-white py-3 md:py-4 overflow-hidden">
+  <div class="ticker-track font-mono text-xs tracking-widest uppercase">
+    {% for _ in "12345678"|make_list %}
+      <span class="mx-8 md:mx-10">Bid Now</span>
+      <span class="mx-8 md:mx-10 text-amber-500">·</span>
+      <span class="mx-8 md:mx-10">Win the Auction</span>
+      <span class="mx-8 md:mx-10 text-amber-500">·</span>
+      <span class="mx-8 md:mx-10">Highest Offer Takes the Pair</span>
+      <span class="mx-8 md:mx-10 text-amber-500">·</span>
+      <span class="mx-8 md:mx-10">Sneaker Wreck</span>
+      <span class="mx-8 md:mx-10 text-amber-500">·</span>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ── How It Works ── -->
+<section class="py-20 md:py-40 px-5 sm:px-8 lg:px-12 max-w-[1920px] mx-auto">
+  <div class="mb-12 md:mb-20">
+    <span class="font-mono text-xs tracking-widest uppercase text-secondary block mb-4">Simple process</span>
+    <h2 class="font-serif font-light text-4xl md:text-5xl tracking-tight">How it works</h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 border border-stone-100">
+    <div class="p-8 md:p-14 border-b md:border-b-0 md:border-r border-stone-100">
+      <div class="font-mono text-5xl md:text-6xl text-stone-100 font-bold mb-6 md:mb-8">01</div>
+      <h3 class="font-serif text-xl md:text-2xl mb-3 md:mb-4">Browse the Drop</h3>
+      <p class="font-sans text-sm leading-loose text-stone-500">
+        Explore active sneaker auctions across all categories — runners, classics, collabs, and rare finds. Every listing has a starting bid set by the seller.
+      </p>
+    </div>
+    <div class="p-8 md:p-14 border-b md:border-b-0 md:border-r border-stone-100">
+      <div class="font-mono text-5xl md:text-6xl text-stone-100 font-bold mb-6 md:mb-8">02</div>
+      <h3 class="font-serif text-xl md:text-2xl mb-3 md:mb-4">Place Your Bid</h3>
+      <p class="font-sans text-sm leading-loose text-stone-500">
+        Enter any amount above the current highest bid. Your bid is live instantly. Keep watching — others may outbid you before the seller closes the auction.
+      </p>
+    </div>
+    <div class="p-8 md:p-14">
+      <div class="font-mono text-5xl md:text-6xl text-stone-100 font-bold mb-6 md:mb-8">03</div>
+      <h3 class="font-serif text-xl md:text-2xl mb-3 md:mb-4">Win the Pair</h3>
+      <p class="font-sans text-sm leading-loose text-stone-500">
+        When the seller closes the auction, the highest bidder wins. No tricks — the highest offer takes the shoe home.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Seller CTA ── -->
+<section class="mx-5 sm:mx-8 lg:mx-12 mb-20 md:mb-40 py-16 md:py-24 px-8 md:px-16 lg:px-24 bg-stone-900 text-white rounded-lg relative overflow-hidden">
+  <div class="max-w-3xl relative z-10">
+    <span class="font-mono text-xs uppercase tracking-widest text-amber-500 mb-5 block">For Sellers</span>
+    <h2 class="font-serif font-light text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-6 md:mb-8">
+      Got a pair to move?<br><span class="italic">List it in seconds.</span>
+    </h2>
+    <p class="font-sans text-sm md:text-base text-stone-400 leading-relaxed max-w-md mb-10 md:mb-12">
+      Set your starting price, add a photo and description, then let the community bid. You decide when to close the auction.
+    </p>
+    <a href="{% url 'create' %}" class="inline-block bg-white text-stone-900 font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:bg-stone-100 transition-colors duration-300">
+      List a Pair
+    </a>
+  </div>
+  <div class="absolute right-[-5%] top-1/2 -translate-y-1/2 opacity-5 select-none pointer-events-none font-serif italic text-white" style="font-size: clamp(8rem, 25vw, 22rem); line-height:1; font-family:'Newsreader',serif;">$</div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="w-full py-14 px-5 sm:px-8 lg:px-12 bg-stone-50">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-[1920px] mx-auto gap-8 md:gap-0">
+    <div>
+      <div class="font-serif italic text-xl text-stone-900 mb-3">Sneaker Wreck</div>
+      <p class="font-mono text-xs tracking-widest uppercase text-stone-400 max-w-xs leading-loose">
+        © 2024 Sneaker Wreck. All rights reserved.<br>
+        Built by <a href="https://vaibhavdev.qzz.io" target="_blank" class="text-stone-900 border-b border-stone-400 hover:border-stone-900 transition-colors">Vaibhav</a>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-6 md:gap-8">
+      <a href="{% url 'shop' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Shop</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'create' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Sell</a>
+        <a href="{% url 'watchList' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Watchlist</a>
+      {% else %}
+        <a href="{% url 'register' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Register</a>
+        <a href="{% url 'login' %}" class="text-stone-400 font-mono text-xs tracking-widest uppercase hover:text-stone-900 transition-colors">Log In</a>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

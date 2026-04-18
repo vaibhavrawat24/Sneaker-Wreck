@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="16" fill="#111"/>
+
+  <!-- Sole -->
+  <rect x="10" y="68" width="80" height="10" rx="5" fill="#fff"/>
+
+  <!-- Upper shoe body (filled polygon giving classic sneaker profile) -->
+  <path d="
+    M 15 68
+    L 15 52
+    Q 16 42 26 38
+    L 50 34
+    Q 62 32 70 36
+    Q 80 40 82 52
+    L 85 68
+    Z
+  " fill="#fff"/>
+
+  <!-- Toe cap darker area -->
+  <path d="M 15 68 L 15 56 Q 16 48 22 44 Q 18 50 17 60 Z" fill="#ddd"/>
+
+  <!-- Ankle cutout (negative space for collar) -->
+  <path d="M 38 34 Q 36 26 30 24 Q 26 22 22 26 Q 20 30 22 36 Q 24 32 28 30 Q 33 28 38 34 Z" fill="#111"/>
+
+  <!-- Tongue -->
+  <rect x="46" y="34" width="8" height="18" rx="2" fill="#e8e8e8"/>
+
+  <!-- Laces -->
+  <line x1="40" y1="43" x2="54" y2="41" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+  <line x1="40" y1="49" x2="54" y2="47" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Side stripe -->
+  <path d="M 22 60 Q 40 54 70 58" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

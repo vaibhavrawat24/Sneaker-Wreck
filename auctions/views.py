@@ -98,6 +98,8 @@ def addComment(request,id):
 
 
 def displayWatchList(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
     currentUser=request.user
     listings=currentUser.listingWatchList.all()
     return render(request,"auctions/watchlist.html",{
@@ -123,6 +125,9 @@ def addWatchList(request,id):
     currentUser=request.user
     listingData.watchlist.add(currentUser)
     return HttpResponseRedirect(reverse("listing",args=(listingData.id, )))
+
+def landing(request):
+    return render(request, "auctions/landing.html")
 
 def index(request):
     activeListings=Listing.objects.filter(isActive=True)

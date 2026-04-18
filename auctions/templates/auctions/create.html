@@ -1,37 +1,54 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Create New Listings</h2>
+<div class="max-w-xl mb-20 md:mb-40">
+  <div class="mb-10 md:mb-16 border-b border-stone-100 pb-8 md:pb-10">
+    <span class="font-mono text-xs tracking-widest uppercase text-secondary block mb-3">New Listing</span>
+    <h1 class="font-serif font-light text-4xl md:text-5xl tracking-tight">List a Pair</h1>
+  </div>
 
-    <form action="{% url 'create' %}" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" name="title" class="form-control" id="title"  placeholder="Enter title">
-        </div>
-        <div class="form-group">
-            <label for="description">Description</label>
-            <input type="text" name="description" class="form-control" id="description"  placeholder="Enter description">
-        </div>
-        <div class="form-group">
-            <label for="imageurl">Image Url</label>
-            <input type="text" name="imageurl" class="form-control" id="imageurl"  placeholder="Enter image url">
-        </div>
-        <div class="form-group">
-            <label for="price">Price</label>
-            <input type="number" min="0" name="price" class="form-control" id="price"  placeholder="Enter price">
-        </div>
-        <div class="form-group">
-            <label for="category">Choose a category:</label>
+  <form action="{% url 'create' %}" method="POST" class="space-y-8 md:space-y-10">
+    {% csrf_token %}
 
-            <select name="category" id="category">
-                {% for category in categories %}
-                    <option value="category">{{ category }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-success">Create New Listing</button>
-    </form>
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Title</label>
+      <input type="text" name="title" placeholder="e.g. Nike Air Max 90"
+             class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+    </div>
 
-    
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Description</label>
+      <input type="text" name="description" placeholder="Condition, size, notes…"
+             class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+    </div>
+
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Image URL</label>
+      <input type="text" name="imageurl" placeholder="https://…"
+             class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+    </div>
+
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Starting Bid ($)</label>
+      <input type="number" min="0" step="0.01" name="price" placeholder="0.00"
+             class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300">
+    </div>
+
+    <div>
+      <label class="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant block mb-3">Category</label>
+      <select name="category" style="-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23aaa' d='M6 8L1 3h10z'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 0 center;padding-right:18px;"
+              class="w-full border-0 border-b border-stone-200 bg-transparent font-sans text-base px-0 py-3 focus:outline-none focus:border-stone-900 cursor-pointer">
+        {% for category in categories %}
+          <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="pt-4">
+      <button type="submit" class="w-full bg-primary text-on-primary font-mono text-xs tracking-widest uppercase py-4 md:py-5 hover:opacity-80 transition-opacity">
+        Create Listing
+      </button>
+    </div>
+  </form>
+</div>
 {% endblock %}
