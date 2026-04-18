@@ -185,9 +185,15 @@
     <p class="font-sans text-sm md:text-base text-stone-400 leading-relaxed max-w-md mb-10 md:mb-12">
       Set your starting price, add a photo and description, then let the community bid. You decide when to close the auction.
     </p>
-    <a href="{% url 'create' %}" class="inline-block bg-white text-stone-900 font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:bg-stone-100 transition-colors duration-300">
-      List a Pair
-    </a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'create' %}" class="inline-block bg-white text-stone-900 font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:bg-stone-100 transition-colors duration-300">
+        List a Pair
+      </a>
+    {% else %}
+      <a href="{% url 'login' %}" class="inline-block bg-white text-stone-900 font-mono text-xs tracking-widest uppercase px-10 py-4 md:py-5 hover:bg-stone-100 transition-colors duration-300">
+        Log In to List
+      </a>
+    {% endif %}
   </div>
   <div class="absolute right-[-5%] top-1/2 -translate-y-1/2 opacity-5 select-none pointer-events-none font-serif italic text-white" style="font-size: clamp(8rem, 25vw, 22rem); line-height:1; font-family:'Newsreader',serif;">$</div>
 </section>

@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -173,6 +174,7 @@ def displayCategory(request):
         })
     
 
+@login_required(login_url="login")
 def createListing(request):
     if request.method=="GET":
         allCategories=Category.objects.all()
