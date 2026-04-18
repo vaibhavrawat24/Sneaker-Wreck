@@ -13,9 +13,9 @@ def listing(request,id):
     except Listing.DoesNotExist:
         listingData = None
         
-    isListingInWatchList=request.user in listingData.watchlist.all()
+    isListingInWatchList = request.user.is_authenticated and request.user in listingData.watchlist.all()
     allComments=Comment.objects.filter(listing=listingData)
-    isOwner=request.user.username==listingData.owner.username
+    isOwner = request.user.is_authenticated and request.user.username==listingData.owner.username
     return render(request,"auctions/listing.html",{
         "listing": listingData,
         "isListingInWatchList":isListingInWatchList,
@@ -111,20 +111,40 @@ def removeWatchList(request,id):
         listingData=Listing.objects.get(pk=id)
     except Listing.DoesNotExist:
         listingData = None
-        
+
     currentUser=request.user
     listingData.watchlist.remove(currentUser)
-    return HttpResponseRedirect(reverse("listing",args=(listingData.id, )))
+    isListingInWatchList=False
+    allComments=Comment.objects.filter(listing=listingData)
+    isOwner=request.user.username==listingData.owner.username
+    return render(request,"auctions/listing.html",{
+        "listing": listingData,
+        "isListingInWatchList":isListingInWatchList,
+        "allComments":allComments,
+        "isOwner": isOwner,
+        "watchlist_message": "Removed from watchlist",
+        "watchlist_removed": True,
+    })
 
 def addWatchList(request,id):
     try:
         listingData=Listing.objects.get(pk=id)
     except Listing.DoesNotExist:
         listingData = None
-        
+
     currentUser=request.user
     listingData.watchlist.add(currentUser)
-    return HttpResponseRedirect(reverse("listing",args=(listingData.id, )))
+    isListingInWatchList=True
+    allComments=Comment.objects.filter(listing=listingData)
+    isOwner=request.user.username==listingData.owner.username
+    return render(request,"auctions/listing.html",{
+        "listing": listingData,
+        "isListingInWatchList":isListingInWatchList,
+        "allComments":allComments,
+        "isOwner": isOwner,
+        "watchlist_message": "Saved to watchlist",
+        "watchlist_removed": False,
+    })
 
 def landing(request):
     return render(request, "auctions/landing.html")

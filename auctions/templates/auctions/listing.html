@@ -2,6 +2,19 @@
 
 {% block body %}
 
+{% if watchlist_message %}
+  <div id="wl-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-white font-mono text-xs tracking-widest uppercase px-6 py-3 flex items-center gap-3 shadow-lg transition-opacity duration-500">
+    <span class="material-symbols-outlined text-sm">{% if watchlist_removed %}bookmark_remove{% else %}bookmark_added{% endif %}</span>
+    {{ watchlist_message }}
+  </div>
+  <script>
+    setTimeout(function() {
+      var t = document.getElementById('wl-toast');
+      if (t) { t.style.opacity = '0'; setTimeout(function(){ t.remove(); }, 500); }
+    }, 2500);
+  </script>
+{% endif %}
+
 {% if not listing.isActive and user == listing.price.user %}
   <div class="w-full bg-stone-900 text-stone-50 text-center py-3 font-mono text-xs tracking-widest uppercase mb-6">
     Congratulations — you won this auction.
@@ -40,46 +53,64 @@
       {{ listing.description }}
     </p>
 
-    {% if user.is_authenticated and listing.isActive %}
+    {% if listing.isActive %}
       <div class="space-y-3 md:space-y-4 mb-8 md:mb-10">
 
-        <form action="{% url 'addBid' id=listing.id %}" method="POST">
-          {% csrf_token %}
-          <div class="flex gap-2 md:gap-3">
-            <input type="number" min="0" step="0.01" name="newBid" placeholder="Your bid ($)"
-                   class="flex-1 border-0 border-b border-stone-300 bg-transparent font-mono text-sm px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300 tracking-wide">
-            <button type="submit" class="bg-primary text-on-primary font-mono text-xs tracking-widest uppercase px-6 md:px-8 py-3 hover:opacity-80 transition-opacity whitespace-nowrap">
-              Place Bid
-            </button>
-          </div>
-        </form>
-
-        {% if isListingInWatchList %}
-          <form action="{% url 'removeWatchList' id=listing.id %}" method="POST">
+        {% if user.is_authenticated %}
+          <form action="{% url 'addBid' id=listing.id %}" method="POST">
             {% csrf_token %}
-            <button type="submit" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
-              <span>Remove from Watchlist</span>
-              <span class="material-symbols-outlined text-sm">bookmark_remove</span>
-            </button>
+            <div class="flex gap-2 md:gap-3">
+              <input type="number" min="0" step="0.01" name="newBid" placeholder="Your bid ($)"
+                     class="flex-1 border-0 border-b border-stone-300 bg-transparent font-mono text-sm px-0 py-3 focus:outline-none focus:border-stone-900 placeholder-stone-300 tracking-wide">
+              <button type="submit" class="bg-primary text-on-primary font-mono text-xs tracking-widest uppercase px-6 md:px-8 py-3 hover:opacity-80 transition-opacity whitespace-nowrap">
+                Place Bid
+              </button>
+            </div>
           </form>
+
+          {% if isListingInWatchList %}
+            <form action="{% url 'removeWatchList' id=listing.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
+                <span>Remove from Watchlist</span>
+                <span class="material-symbols-outlined text-sm">bookmark_remove</span>
+              </button>
+            </form>
+          {% else %}
+            <form action="{% url 'addWatchList' id=listing.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
+                <span>Save to Watchlist</span>
+                <span class="material-symbols-outlined text-sm">bookmark_add</span>
+              </button>
+            </form>
+          {% endif %}
+
+          {% if isOwner %}
+            <form action="{% url 'closeAuction' id=listing.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="w-full border-b border-red-200 py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-red-400 text-left flex justify-between items-center hover:text-red-600 transition-colors">
+                <span>Close Auction</span>
+                <span class="material-symbols-outlined text-sm">gavel</span>
+              </button>
+            </form>
+          {% endif %}
+
         {% else %}
-          <form action="{% url 'addWatchList' id=listing.id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
-              <span>Save to Watchlist</span>
-              <span class="material-symbols-outlined text-sm">bookmark_add</span>
-            </button>
-          </form>
-        {% endif %}
-
-        {% if isOwner %}
-          <form action="{% url 'closeAuction' id=listing.id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="w-full border-b border-red-200 py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-red-400 text-left flex justify-between items-center hover:text-red-600 transition-colors">
-              <span>Close Auction</span>
-              <span class="material-symbols-outlined text-sm">gavel</span>
-            </button>
-          </form>
+          <div class="flex gap-2 md:gap-3">
+            <input type="number" min="0" step="0.01" placeholder="Your bid ($)" disabled
+                   class="flex-1 border-0 border-b border-stone-200 bg-transparent font-mono text-sm px-0 py-3 placeholder-stone-300 tracking-wide opacity-50 cursor-not-allowed">
+            <a href="{% url 'login' %}" class="bg-primary text-on-primary font-mono text-xs tracking-widest uppercase px-6 md:px-8 py-3 hover:opacity-80 transition-opacity whitespace-nowrap flex items-center">
+              Sign In to Bid
+            </a>
+          </div>
+          <a href="{% url 'login' %}" class="w-full border-b border-outline-variant py-3 md:py-4 font-mono uppercase tracking-widest text-xs text-on-surface-variant text-left flex justify-between items-center hover:text-primary transition-colors">
+            <span>Save to Watchlist</span>
+            <span class="material-symbols-outlined text-sm">bookmark_add</span>
+          </a>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-stone-400">
+            <a href="{% url 'register' %}" class="border-b border-stone-300 hover:border-stone-900 hover:text-stone-900 transition-colors">Create an account</a> to place bids and save to watchlist.
+          </p>
         {% endif %}
 
       </div>
@@ -125,6 +156,14 @@
         Post
       </button>
     </form>
+  {% else %}
+    <div class="flex gap-3 mb-10 md:mb-16">
+      <input type="text" placeholder="Leave a comment…" disabled
+             class="flex-1 border-0 border-b border-stone-200 bg-transparent font-sans text-sm px-0 py-3 placeholder-stone-300 opacity-50 cursor-not-allowed">
+      <a href="{% url 'login' %}" class="bg-primary text-on-primary font-mono text-xs tracking-widest uppercase px-5 md:px-8 py-3 hover:opacity-80 transition-opacity whitespace-nowrap flex items-center">
+        Sign In to Post
+      </a>
+    </div>
   {% endif %}
 
   <div class="max-w-2xl">
