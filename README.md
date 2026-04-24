@@ -1,6 +1,6 @@
 # SneakerWreck
 
-http://sneakerwreck.pythonanywhere.com/
+https://sneakerwreck.pythonanywhere.com/
 
 ## Overview
 
